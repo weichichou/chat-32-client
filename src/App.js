@@ -1,9 +1,11 @@
 import React from 'react';
+import superagent from 'superagent';
 import './App.css';
 
 class App extends React.Component {
   state = {
-    messages: ['fake']
+    messages: ['fake'],
+    value: ''
   }
 
   stream = new EventSource('http://localhost:4000/stream')
@@ -28,12 +30,31 @@ class App extends React.Component {
     }
   }
 
+  onChange = (event) => {
+    const {value} = event.target
+    this.setState({value})
+  }
+
+  onSubmit = (event) => {
+    event.preventDefault()
+    const {value} = this.state
+    const url = 'http://localhost:4000/message'
+    superagent
+      .post(url)
+      .send({message: value})
+      .then(res => console.log('response test', res))
+  }
+
   render(){
     const list = this.state.messages
       .map((message, index) => <p key={index}>{message}</p>)
     return (
       <div className="App">
         <h1>Hello World</h1>
+        <form onSubmit={this.onSubmit}>
+          <input type='text' onChange={this.onChange}></input>
+          <button>Submit</button>
+        </form>
         <div>
           {list}
         </div>
