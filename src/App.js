@@ -35,6 +35,10 @@ class App extends React.Component {
     this.setState({value})
   }
 
+  onReset = () => {
+    this.setState({value: ''})
+  }
+
   onSubmit = (event) => {
     event.preventDefault()
     const {value} = this.state
@@ -52,7 +56,8 @@ class App extends React.Component {
       <div className="App">
         <h1>Hello World</h1>
         <form onSubmit={this.onSubmit}>
-          <input type='text' onChange={this.onChange}></input>
+          <input type='text' onChange={this.onChange} value={this.state.value}></input>
+          <button type='button' onClick={this.onReset}>Reset</button>
           <button>Submit</button>
         </form>
         <div>
