@@ -12,14 +12,20 @@ class App extends React.Component {
 
   componentDidMount(){
     this.stream.onmessage = (event) => {
+      // Desctructure the data - what was passed to stream.send
       const {data} = event
 
-      // convert the string back to javascript
+      // convert the serialized string back to javascript data
       const parsed = JSON.parse(data)
 
+      // Check if the sent data is an array
+      // If it is an array, we assume it contains ALL messages
+      // and replace the full list in the state
       if (Array.isArray(parsed)){
         this.setState({messages: parsed})
       }else{
+        // If it is not an array, we assuem it is a single message
+        // and add it at the end of the list
         const messages = [
           ...this.state.messages, parsed
         ]
